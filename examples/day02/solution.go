@@ -2,13 +2,10 @@ package main
 
 import (
 	"bufio"
-	_ "embed"
 	"fmt"
+	"io"
 	"strings"
 )
-
-//go:embed input.txt
-var input string
 
 type Move int
 
@@ -25,6 +22,20 @@ var stringToMove = map[string]Move{
 	"X": Rock,
 	"Y": Paper,
 	"Z": Scissors,
+}
+
+type Strategy int
+
+const (
+	Lose Strategy = iota + 1
+	Draw
+	Win
+)
+
+var stringToStrategy = map[string]Strategy{
+	"X": Lose,
+	"Y": Draw,
+	"Z": Win,
 }
 
 func getMoveScore(move Move) int {
@@ -80,34 +91,6 @@ func GetScore(opponentMove, move Move) int {
 	return getMoveScore(move) + getTurnScore(opponentMove, move)
 }
 
-func SolveFirstPart(input string) int {
-	total := 0
-
-	scanner := bufio.NewScanner(strings.NewReader(input))
-	for scanner.Scan() {
-		l := strings.Split(scanner.Text(), " ")
-		opponentMove := stringToMove[l[0]]
-		move := stringToMove[l[1]]
-		total += GetScore(opponentMove, move)
-	}
-
-	return total
-}
-
-type Strategy int
-
-const (
-	Lose Strategy = iota + 1
-	Draw
-	Win
-)
-
-var stringToStrategy = map[string]Strategy{
-	"X": Lose,
-	"Y": Draw,
-	"Z": Win,
-}
-
 func GetMoveByStrategy(opponentMove Move, strategy Strategy) Move {
 	switch strategy {
 	case Lose:
@@ -121,9 +104,24 @@ func GetMoveByStrategy(opponentMove Move, strategy Strategy) Move {
 	return Move(0)
 }
 
-func SolveSecondPart(input string) int {
+func SolveFirstPart(in io.Reader, out io.Writer) (int, error) {
 	total := 0
-	scanner := bufio.NewScanner(strings.NewReader(input))
+
+	scanner := bufio.NewScanner(in)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+		l := strings.Split(scanner.Text(), " ")
+		opponentMove := stringToMove[l[0]]
+		move := stringToMove[l[1]]
+		total += GetScore(opponentMove, move)
+	}
+
+	return total, nil
+}
+
+func SolveSecondPart(in io.Reader, out io.Writer) (int, error) {
+	total := 0
+	scanner := bufio.NewScanner(in)
 	for scanner.Scan() {
 		l := strings.Split(scanner.Text(), " ")
 		opponentMove := stringToMove[l[0]]
@@ -131,10 +129,6 @@ func SolveSecondPart(input string) int {
 		move := GetMoveByStrategy(opponentMove, strategy)
 		total += GetScore(opponentMove, move)
 	}
-	return total
-}
 
-func main() {
-	fmt.Println(SolveFirstPart(input))
-	fmt.Println(SolveSecondPart(input))
+	return total, nil
 }

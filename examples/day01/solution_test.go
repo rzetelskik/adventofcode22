@@ -2,45 +2,49 @@ package main
 
 import (
 	_ "embed"
+	"io"
 	"reflect"
+	"strings"
 	"testing"
 )
 
-//go:embed example_input.txt
-var exampleInput string
+const exampleInput = `1000
+2000
+3000
 
-var summedExampleInput []int
+4000
 
-func must(f func() (interface{}, error)) interface{} {
-	res, err := f()
-	if err != nil {
-		panic(err)
-	}
-	return res
-}
+5000
+6000
 
-func init() {
-	summedExampleInput = sumGroups(must(func() (interface{}, error) {
-		return parseInput(exampleInput)
-	}).([][]int))
-}
+7000
+8000
+9000
 
-func Test_solveFirstPart(t *testing.T) {
+10000
+`
+
+func Test_SolveFirstPart(t *testing.T) {
 	ts := []struct {
 		name     string
-		input    []int
+		in       io.Reader
+		out      io.Writer
 		expected int
 	}{
 		{
 			name:     "example",
-			input:    summedExampleInput,
+			in:       strings.NewReader(exampleInput),
+			out:      io.Discard,
 			expected: 24000,
 		},
 	}
 
 	for _, tt := range ts {
 		t.Run(tt.name, func(t *testing.T) {
-			got := solveFirstPart(summedExampleInput)
+			got, err := SolveFirstPart(tt.in, tt.out)
+			if err != nil {
+				t.Errorf("got unexpected error: %v", err)
+			}
 
 			if !reflect.DeepEqual(got, tt.expected) {
 				t.Errorf("got different than expected: got %v, expected %v", got, tt.expected)
@@ -49,22 +53,27 @@ func Test_solveFirstPart(t *testing.T) {
 	}
 }
 
-func Test_solveSecondPart(t *testing.T) {
+func Test_SolveSecondPart(t *testing.T) {
 	ts := []struct {
 		name     string
-		input    []int
+		in       io.Reader
+		out      io.Writer
 		expected int
 	}{
 		{
 			name:     "example",
-			input:    summedExampleInput,
+			in:       strings.NewReader(exampleInput),
+			out:      io.Discard,
 			expected: 45000,
 		},
 	}
 
 	for _, tt := range ts {
 		t.Run(tt.name, func(t *testing.T) {
-			got := solveSecondPart(summedExampleInput)
+			got, err := SolveSecondPart(tt.in, tt.out)
+			if err != nil {
+				t.Errorf("got unexpected error: %v", err)
+			}
 
 			if !reflect.DeepEqual(got, tt.expected) {
 				t.Errorf("got different than expected: got %v, expected %v", got, tt.expected)
