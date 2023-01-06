@@ -53,10 +53,10 @@ func sumGroups(input [][]int) []int {
 	return res
 }
 
-func SolveFirstPart(in io.Reader, out io.Writer) (int, error) {
+func SolveFirstPart(in io.Reader, out io.Writer) error {
 	parsedIn, err := parseInput(in)
 	if err != nil {
-		return 0, fmt.Errorf("can't parse input: %w", err)
+		return fmt.Errorf("can't parse input: %w", err)
 	}
 
 	groups := sumGroups(parsedIn)
@@ -66,13 +66,18 @@ func SolveFirstPart(in io.Reader, out io.Writer) (int, error) {
 		res = util.Max(res, g)
 	}
 
-	return res, nil
+	_, err = out.Write([]byte(strconv.Itoa(res)))
+	if err != nil {
+		return fmt.Errorf("can't write to out: %w", err)
+	}
+
+	return nil
 }
 
-func SolveSecondPart(in io.Reader, out io.Writer) (int, error) {
+func SolveSecondPart(in io.Reader, out io.Writer) error {
 	parsedIn, err := parseInput(in)
 	if err != nil {
-		return 0, fmt.Errorf("can't parse input: %w", err)
+		return fmt.Errorf("can't parse input: %w", err)
 	}
 
 	h := make(util.Heap[int], 0)
@@ -91,5 +96,10 @@ func SolveSecondPart(in io.Reader, out io.Writer) (int, error) {
 		res += i
 	}
 
-	return res, nil
+	_, err = out.Write([]byte(strconv.Itoa(res)))
+	if err != nil {
+		return fmt.Errorf("can't write to out: %w", err)
+	}
+
+	return nil
 }

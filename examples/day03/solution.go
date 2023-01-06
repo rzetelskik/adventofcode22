@@ -2,7 +2,9 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"io"
+	"strconv"
 )
 
 var priorities = map[rune]int{}
@@ -36,7 +38,7 @@ func intersectSets[T comparable](xs, ys map[T]struct{}) map[T]struct{} {
 	return intersection
 }
 
-func SolveFirstPart(in io.Reader, out io.Writer) (int, error) {
+func SolveFirstPart(in io.Reader, out io.Writer) error {
 	total := 0
 
 	scanner := bufio.NewScanner(in)
@@ -51,10 +53,15 @@ func SolveFirstPart(in io.Reader, out io.Writer) (int, error) {
 		}
 	}
 
-	return total, nil
+	_, err := out.Write([]byte(strconv.Itoa(total)))
+	if err != nil {
+		return fmt.Errorf("can't write to out: %w", err)
+	}
+
+	return nil
 }
 
-func SolveSecondPart(in io.Reader, out io.Writer) (int, error) {
+func SolveSecondPart(in io.Reader, out io.Writer) error {
 	total := 0
 
 	lines := make([]string, 0)
@@ -75,5 +82,10 @@ func SolveSecondPart(in io.Reader, out io.Writer) (int, error) {
 		}
 	}
 
-	return total, nil
+	_, err := out.Write([]byte(strconv.Itoa(total)))
+	if err != nil {
+		return fmt.Errorf("can't write to out: %w", err)
+	}
+
+	return nil
 }

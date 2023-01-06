@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"plugin"
+	"strings"
 )
 
 type Executor struct {
@@ -20,15 +21,15 @@ func NewExecutor(path string) (*Executor, error) {
 	return e, nil
 }
 
-func (e *Executor) runSymbol(plugin *plugin.Plugin, symbol string, in io.Reader, out io.Writer) (int, error) {
+func (e *Executor) runSymbol(plugin *plugin.Plugin, symbol string, in io.Reader, out io.Writer) error {
 	sym, err := plugin.Lookup(symbol)
 	if err != nil {
-		return 0, fmt.Errorf("can't lookup symbol %s: %w", symbol, err)
+		return fmt.Errorf("can't lookup symbol %s: %w", symbol, err)
 	}
 
-	s, ok := sym.(func(io.Reader, io.Writer) (int, error))
+	s, ok := sym.(func(io.Reader, io.Writer) error)
 	if !ok {
-		return 0, fmt.Errorf("invalid type of symbol")
+		return fmt.Errorf("invalid type of symbol")
 	}
 
 	return s(in, out)
@@ -45,19 +46,23 @@ func (e *Executor) Run() error {
 		return fmt.Errorf("can't read from stdin: %w", err)
 	}
 
+	var b strings.Builder
+
 	sym1 := "SolveFirstPart"
-	res1, err := e.runSymbol(p, sym1, bytes.NewReader(in), os.Stdout)
+	err = e.runSymbol(p, sym1, bytes.NewReader(in), &b)
 	if err != nil {
 		return fmt.Errorf("can't run symbol %s: %w", sym1, err)
 	}
-	fmt.Println(res1)
+	fmt.Println(b.String())
+
+	b.Reset()
 
 	sym2 := "SolveSecondPart"
-	res2, err := e.runSymbol(p, sym2, bytes.NewReader(in), os.Stdout)
+	err = e.runSymbol(p, sym2, bytes.NewReader(in), &b)
 	if err != nil {
 		return fmt.Errorf("can't run symbol %s: %w", sym2, err)
 	}
-	fmt.Println(res2)
+	fmt.Println(b.String())
 
 	return nil
 }

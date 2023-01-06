@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"github.com/rzetelskik/adventofcode22/pkg/util"
 	"golang.org/x/exp/constraints"
 	"io"
@@ -45,36 +46,48 @@ func rangesOverlap[T constraints.Integer | constraints.Float](xs, ys []T) bool {
 	return (xs[len(xs)-1]-xs[0]+1)+(ys[len(ys)-1]-ys[0]+1) > max-min+1
 }
 
-func SolveFirstPart(in io.Reader, out io.Writer) (int, error) {
+func SolveFirstPart(in io.Reader, out io.Writer) error {
 	scanner := bufio.NewScanner(in)
 
 	res := 0
 	for scanner.Scan() {
 		ranges, err := parseRanges(scanner.Text())
 		if err != nil {
-			return 0, err
+			return err
 		}
 
 		if rangesOverlapFully(ranges[0], ranges[1]) {
 			res += 1
 		}
 	}
-	return res, nil
+
+	_, err := out.Write([]byte(strconv.Itoa(res)))
+	if err != nil {
+		return fmt.Errorf("can't write to out: %w", err)
+	}
+
+	return nil
 }
 
-func SolveSecondPart(in io.Reader, out io.Writer) (int, error) {
+func SolveSecondPart(in io.Reader, out io.Writer) error {
 	scanner := bufio.NewScanner(in)
 
 	res := 0
 	for scanner.Scan() {
 		ranges, err := parseRanges(scanner.Text())
 		if err != nil {
-			return 0, err
+			return err
 		}
 
 		if rangesOverlap(ranges[0], ranges[1]) {
 			res += 1
 		}
 	}
-	return res, nil
+
+	_, err := out.Write([]byte(strconv.Itoa(res)))
+	if err != nil {
+		return fmt.Errorf("can't write to out: %w", err)
+	}
+
+	return nil
 }

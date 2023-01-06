@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"strconv"
 	"strings"
 )
 
@@ -104,22 +105,26 @@ func GetMoveByStrategy(opponentMove Move, strategy Strategy) Move {
 	return Move(0)
 }
 
-func SolveFirstPart(in io.Reader, out io.Writer) (int, error) {
+func SolveFirstPart(in io.Reader, out io.Writer) error {
 	total := 0
 
 	scanner := bufio.NewScanner(in)
 	for scanner.Scan() {
-		fmt.Println(scanner.Text())
 		l := strings.Split(scanner.Text(), " ")
 		opponentMove := stringToMove[l[0]]
 		move := stringToMove[l[1]]
 		total += GetScore(opponentMove, move)
 	}
 
-	return total, nil
+	_, err := out.Write([]byte(strconv.Itoa(total)))
+	if err != nil {
+		return fmt.Errorf("can't write to out: %w", err)
+	}
+
+	return nil
 }
 
-func SolveSecondPart(in io.Reader, out io.Writer) (int, error) {
+func SolveSecondPart(in io.Reader, out io.Writer) error {
 	total := 0
 	scanner := bufio.NewScanner(in)
 	for scanner.Scan() {
@@ -130,5 +135,10 @@ func SolveSecondPart(in io.Reader, out io.Writer) (int, error) {
 		total += GetScore(opponentMove, move)
 	}
 
-	return total, nil
+	_, err := out.Write([]byte(strconv.Itoa(total)))
+	if err != nil {
+		return fmt.Errorf("can't write to out: %w", err)
+	}
+
+	return nil
 }
