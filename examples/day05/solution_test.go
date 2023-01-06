@@ -9,8 +9,15 @@ import (
 	"testing"
 )
 
-const exampleInput = `
-// TODO: fill in with example
+const exampleInput = `    [D]    
+[N] [C]    
+[Z] [M] [P]
+ 1   2   3 
+
+move 1 from 2 to 1
+move 3 from 1 to 3
+move 2 from 2 to 1
+move 1 from 1 to 2
 `
 
 func Test_SolveFirstPart(t *testing.T) {
@@ -22,13 +29,13 @@ func Test_SolveFirstPart(t *testing.T) {
 		{
 			name:     "example",
 			in:       strings.NewReader(exampleInput),
-			expected: []byte(""), // TODO: fill in with example
+			expected: []byte("CMZ"),
 		},
 	}
 
 	for _, tt := range ts {
 		t.Run(tt.name, func(t *testing.T) {
-		    var buf bytes.Buffer
+			var buf bytes.Buffer
 
 			err := SolveFirstPart(tt.in, &buf)
 			if err != nil {
@@ -53,13 +60,13 @@ func Test_SolveSecondPart(t *testing.T) {
 		{
 			name:     "example",
 			in:       strings.NewReader(exampleInput),
-			expected: []byte(""), // TODO: fill in with example
+			expected: []byte("MCD"),
 		},
 	}
 
 	for _, tt := range ts {
 		t.Run(tt.name, func(t *testing.T) {
-            var buf bytes.Buffer
+			var buf bytes.Buffer
 
 			err := SolveSecondPart(tt.in, &buf)
 			if err != nil {
