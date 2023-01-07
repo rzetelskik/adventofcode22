@@ -8,6 +8,8 @@ import (
 	"testing"
 )
 
+const exampleInput0 = `mjqjpqmgbljsphdztnvjfqwrcgsmlb`
+
 func Test_SolveFirstPart(t *testing.T) {
 	ts := []struct {
 		name     string
@@ -15,9 +17,29 @@ func Test_SolveFirstPart(t *testing.T) {
 		expected string
 	}{
 		{
-			name:     "example",
-			input:    "", // TODO: fill in with example
-			expected: "", // TODO: fill in with example
+			name:     "example1",
+			input:    "mjqjpqmgbljsphdztnvjfqwrcgsmlb",
+			expected: "7",
+		},
+		{
+			name:     "example2",
+			input:    "bvwbjplbgvbhsrlpgdmjqwftvncz",
+			expected: "5",
+		},
+		{
+			name:     "example3",
+			input:    "nppdvjthqldpwncqszvftbrmjlhg",
+			expected: "6",
+		},
+		{
+			name:     "example4",
+			input:    "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg",
+			expected: "10",
+		},
+		{
+			name:     "example5",
+			input:    "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw",
+			expected: "11",
 		},
 	}
 
@@ -47,9 +69,29 @@ func Test_SolveSecondPart(t *testing.T) {
 		expected string
 	}{
 		{
-			name:     "example",
-			input:    "", // TODO: fill in with example
-			expected: "", // TODO: fill in with example
+			name:     "example1",
+			input:    "mjqjpqmgbljsphdztnvjfqwrcgsmlb",
+			expected: "19",
+		},
+		{
+			name:     "example2",
+			input:    "bvwbjplbgvbhsrlpgdmjqwftvncz",
+			expected: "23",
+		},
+		{
+			name:     "example3",
+			input:    "nppdvjthqldpwncqszvftbrmjlhg",
+			expected: "23",
+		},
+		{
+			name:     "example4",
+			input:    "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg",
+			expected: "29",
+		},
+		{
+			name:     "example5",
+			input:    "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw",
+			expected: "26",
 		},
 	}
 
